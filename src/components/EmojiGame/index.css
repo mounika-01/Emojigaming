@@ -1,0 +1,11 @@
+/* src/components/EmojiGame/index.css */
+.emoji-game {
+  background-color: #9796f0;
+  padding: 20px;
+}
+
+.emoji-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

@@ -1,0 +1,9 @@
+/* src/components/WinOrLoseCard/index.css */
+.win-or-lose-card {
+  text-align: center;
+}
+
+.win-or-lose-card img {
+  width: 200px;
+  height: 200px;
+}

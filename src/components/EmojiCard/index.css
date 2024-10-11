@@ -1,0 +1,17 @@
+/* src/components/EmojiCard/index.css */
+.emoji-card {
+  list-style: none;
+  display: inline-block;
+  margin: 10px;
+}
+
+.emoji-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.emoji-image {
+  width: 100px;
+  height: 100px;
+}
