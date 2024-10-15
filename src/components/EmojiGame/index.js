@@ -1,60 +1,71 @@
-import React, {useState} from 'react'
-import './App.css'
+import React from 'react'
+import NavBar from '../NavBar'
+import EmojiCard from '../EmojiCard'
+import WinOrLoseCard from '../WinOrLoseCard'
+import './index.css'
 
-const EmojiGame = ({ emojisList, winImageUrl, loseImageUrl, logoUrl }) => {
-  const [score, setScore] = useState(0)
-  const [topScore, setTopScore] = useState(0)
+const EmojiGame = ({emojisList}) => {
+  const [score, setScore] = React.useState(0)
+  const [topScore, setTopScore] = React.useState(0)
   const [clickedEmojis, setClickedEmojis] = useState([])
-  const [gameStatus, setGameStatus] = useState('PLAYING') // 'PLAYING', 'WON', 'LOST'
-
-  const handleClick = emoji => {
-    if (clickedEmojis.includes(emoji.id)) {
-      setGameStatus('LOST')
-    } else {
-      setClickedEmojis([...clickedEmojis, emoji.id])
-      setScore(score + 1)
-
-      if (clickedEmojis.length + 1 === emojisList.length) {
-        setGameStatus('WON')
-        if (score + 1 > topScore) {
-          setTopScore(score + 1)
-        }
-      }
-    }
-  }
+  const [gameStatus, setGameStatus] = useState('PLAYING')
 
   const resetGame = () => {
-    setScore(0)
     setClickedEmojis([])
+    setScore(0)
     setGameStatus('PLAYING')
   }
 
-   if (gameStatus === 'WON' || gameStatus === 'LOST') {
-    return (
-      <WinOrLoseCard
-        isWon={gameStatus === 'WON'}
-        onPlayAgain={resetGame}
-        score={score}
-        emojisLength={emojisList.length}
-      />
-    );
+  const handleEmojiClick = id => {
+    if (clickedEmojis.includes(id)) {
+      setGameStatus('LOST')
+    } else {
+      setClickedEmojis(prevClicked => [...prevClicked, id])
+      setScore(prevScore => {
+        const newScore = prevScore + 1
+        if (newScore === emojisList.length) {
+          setGameStatus('WON')
+        }
+        return newScore
+      })
+    }
   }
 
-  return (
-    <div>
+  useEffect(() => {
+    if (gameStatus === 'WON' && score > topScore) {
+      setTopScore(score)
+    }
+  }, [gameStatus, score, topScore])
+
+  const renderGame = () => (
+    <div className="emoji-game">
       <NavBar score={score} topScore={topScore} />
-      <h1>Emoji Game</h1>
-      <img src={logoUrl} alt="emoji logo" />
-      <ul>
+      <ul className="emoji-list">
         {emojisList.map(emoji => (
-          <li key={emoji.id}>
-            <button onClick={() => handleClick(emoji)}>
-              <img src={emoji.emojiUrl} alt={emoji.emojiName} />
-            </button>
-          </li>
+          <EmojiCard
+            key={emoji.id}
+            emoji={emoji}
+            onEmojiClick={handleEmojiClick}
+          />
         ))}
       </ul>
     </div>
-  );
-};
+  )
+
+  const renderWinOrLoseCard = () => (
+    <WinOrLoseCard
+      gameStatus={gameStatus}
+      topScore={topScore}
+      onPlayAgain={resetGame}
+      score={score}
+    />
+  )
+
+  return (
+    <div className="emoji-game-container">
+      {gameStatus === 'PLAYING' ? renderGame() : renderWinOrLoseCard()}
+    </div>
+  )
+}
+
 export default EmojiGame
