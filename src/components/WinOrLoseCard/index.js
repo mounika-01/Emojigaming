@@ -1,31 +1,27 @@
-// src/components/WinOrLoseCard/index.js
-import WinOrLoseCard from '../WinOrLoseCard';
 import React from 'react'
 import './index.css'
 
-const WinOrLoseCard = ({isWon, onPlayAgain, score, emojisLength}) => {
-  const imageUrl = isWon
-    ? 'https://assets.ccbp.in/frontend/react-js/won-game-img.png'
-    : 'https://assets.ccbp.in/frontend/react-js/lose-game-img.png'
-
-  const message = isWon ? 'You Won!' : 'You Lose'
-  const displayScore = `Score: ${score}`
+const WinOrLoseCard = ({gameStatus, topScore, onPlayAgain, score}) => {
+  const isWin = gameStatus === 'WON'
 
   return (
     <div className="win-or-lose-card">
-      <img src={imageUrl} alt="win or lose" />
-      <h1>{message}</h1>
-      {isWon ? (
-        <>
-          <p>Best Score</p>
-          <p>{displayScore}</p>
-        </>
-      ) : (
-        <p>{displayScore}</p>
-      )}
+      <h1>{isWin ? 'You Won' : 'You Lose'}</h1>
+      <p>
+        {isWin ? 'Best Score' : 'Score'}: {isWin ? topScore : score}
+      </p>
+      {isWin && <p>12/12</p>}
       <button type="button" onClick={onPlayAgain}>
         Play Again
       </button>
+      <img
+        src={
+          isWin
+            ? 'https://assets.ccbp.in/frontend/react-js/won-game-img.png'
+            : 'https://assets.ccbp.in/frontend/react-js/lose-game-img.png'
+        }
+        alt="win or lose"
+      />
     </div>
   )
 }
